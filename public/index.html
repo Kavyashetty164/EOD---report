@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Digital Desk — Team EOD</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<div id="loginScreen" class="login-wrap">
+  <form id="loginForm" class="login-card">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>DIGITAL DESK</h1>
+    </div>
+    <p class="subtitle">Sign in to your shared EOD workspace</p>
+    <label>NAME</label>
+    <input type="text" id="loginName" placeholder="e.g. Admin" autocomplete="username" required />
+    <label>PASSWORD</label>
+    <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required />
+    <button type="submit">Log in</button>
+    <p id="loginError" class="error-text"></p>
+    <p class="hint">Need an account or forgot your password? Ask your administrator.</p>
+  </form>
+</div>
+
+<!-- ===================== MAIN APP ===================== -->
+<div id="app" class="app hidden">
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>DIGITAL DESK</h1>
+    </div>
+    <div class="clock-wrap">
+      <div id="clockTime" class="clock-time"></div>
+      <div id="clockDate" class="clock-date"></div>
+      <button id="pwBtn" class="btn-ghost">Change password</button>
+      <button id="logoutBtn">Log out</button>
+    </div>
+  </header>
+  <div id="teamLine" class="team-line"></div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="eod">EOD LOG</button>
+    <button class="tab-btn" data-tab="reports">REPORTS</button>
+    <button class="tab-btn" data-tab="calendar">CALENDAR</button>
+    <button class="tab-btn" data-tab="performance">PERFORMANCE</button>
+    <button class="tab-btn admin-only hidden" data-tab="admin">ADMIN</button>
+  </nav>
+
+  <!-- ---------- EOD LOG TAB ---------- -->
+  <section id="tab-eod" class="tab-panel">
+    <div class="panel">
+      <div class="row-inline">
+        <div>
+          <label>DATE</label>
+          <input type="date" id="eodDate" />
+        </div>
+        <div>
+          <label>LOGGED IN AS</label>
+          <div id="loggedInAsBadge" class="badge"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="myStats" class="card-grid stat-grid"></div>
+
+    <div class="panel form-panel">
+      <div class="form-grid">
+        <div class="grow">
+          <label>TASK / WORK DONE</label>
+          <input type="text" id="taskInput" placeholder="e.g. Created Instagram creative" />
+        </div>
+        <div>
+          <label>STATUS</label>
+          <select id="statusInput">
+            <option>Completed</option>
+            <option>In Progress</option>
+            <option>Pending</option>
+            <option>Blocked</option>
+          </select>
+        </div>
+        <div class="grow">
+          <label>WORK DESCRIPTION</label>
+          <input type="text" id="descInput" placeholder="Optional details" maxlength="2000" />
+        </div>
+        <div class="grow">
+          <label>REMARKS</label>
+          <input type="text" id="remarksInput" placeholder="Optional" />
+        </div>
+        <button id="logTaskBtn">Log task</button>
+      </div>
+    </div>
+
+    <div id="memberCards" class="card-grid"></div>
+
+    <div class="panel summary-bar" id="summaryBar"></div>
+  </section>
+
+  <!-- ---------- REPORTS TAB ---------- -->
+  <section id="tab-reports" class="tab-panel hidden">
+    <div class="panel">
+      <div class="form-grid filters">
+        <div><label>FROM</label><input type="date" id="fFrom" /></div>
+        <div><label>TO</label><input type="date" id="fTo" /></div>
+        <div><label>EMPLOYEE</label><select id="fUser"><option value="">Everyone</option></select></div>
+        <div><label>STATUS</label>
+          <select id="fStatus"><option value="">All</option><option>Completed</option><option>In Progress</option><option>Pending</option><option>Blocked</option></select></div>
+        <div class="grow"><label>SEARCH</label><input type="text" id="fSearch" placeholder="Search tasks, descriptions, remarks" /></div>
+        <button id="fReset" class="btn-ghost">Reset</button>
+        <button id="fExport">Export CSV</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div id="reportsTable" class="table-wrap"></div>
+      <div id="reportsPager" class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ---------- CALENDAR TAB ---------- -->
+  <section id="tab-calendar" class="tab-panel hidden">
+    <div class="panel">
+      <div class="cal-header">
+        <button id="prevMonth">‹</button>
+        <h2 id="calTitle">Month Year</h2>
+        <button id="nextMonth">›</button>
+        <button id="todayBtn" class="today-btn">Today</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+    <div id="calDayPanel" class="hidden"></div>
+  </section>
+
+  <!-- ---------- PERFORMANCE TAB ---------- -->
+  <section id="tab-performance" class="tab-panel hidden">
+    <div class="panel">
+      <div class="form-grid">
+        <div><label>FROM</label><input type="date" id="perfFrom" /></div>
+        <div><label>TO</label><input type="date" id="perfTo" /></div>
+        <button id="perfApply">Apply</button>
+        <button id="perfAll" class="btn-ghost">All time</button>
+      </div>
+    </div>
+    <div id="perfCards" class="card-grid perf-grid"></div>
+    <div class="card-grid chart-grid">
+      <div class="perf-card"><h3>Status breakdown</h3><div class="chart-box"><canvas id="perfStatusChart"></canvas></div></div>
+      <div class="perf-card"><h3>Date-wise performance</h3><div class="chart-box"><canvas id="perfDailyChart"></canvas></div></div>
+    </div>
+    <div class="panel">
+      <h3>Export EOD data</h3>
+      <div class="form-grid">
+        <div>
+          <label>FROM</label>
+          <input type="date" id="exportFrom" />
+        </div>
+        <div>
+          <label>TO</label>
+          <input type="date" id="exportTo" />
+        </div>
+        <button id="exportBtn">Export CSV</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- ADMIN TAB ---------- -->
+  <section id="tab-admin" class="tab-panel hidden">
+    <div id="adminStats" class="card-grid stat-grid"></div>
+    <div class="panel">
+      <h3>Employee-wise report overview</h3>
+      <div id="adminOverview" class="users-list"></div>
+    </div>
+    <div class="two-col">
+      <div class="panel">
+        <h3>Add team member</h3>
+        <label>NAME</label>
+        <input type="text" id="newUserName" />
+        <label>PASSWORD</label>
+        <input type="password" id="newUserPassword" />
+        <label>ROLE</label>
+        <select id="newUserRole">
+          <option value="member">Member</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button id="createUserBtn">Create user</button>
+        <p id="adminError" class="error-text"></p>
+      </div>
+      <div class="panel">
+        <h3>Users</h3>
+        <div id="usersList" class="users-list"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<div id="modalRoot" class="modal-root hidden"><div class="modal" id="modalBox" role="dialog" aria-modal="true"></div></div>
+
+<script src="/vendor/chart.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

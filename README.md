@@ -4,6 +4,9 @@ A company-level **End-of-Day report** application. Employees log what they compl
 pending or blocked; administrators get a live view of the whole team with calendar, performance analytics
 and CSV export.
 
+**Live demo:** <https://eod-report-ht80.onrender.com>
+(hosted on Render's free tier — the first request after a period of inactivity can take up to a minute while the service wakes up)
+
 **Stack:** Node.js · Express · express-session · bcryptjs · vanilla HTML/CSS/JS · Chart.js ·
 PostgreSQL (production) / JSON file (zero-setup local development)
 
